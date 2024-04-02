@@ -10,6 +10,7 @@ table {
     border: 2px solid forestgreen;
     width: 800px;
     height: 200px;
+
 }
  
 th {
@@ -22,3 +23,14 @@ td {
     border-bottom: 1px solid black;
     border-left: 1px solid black;
 }
+
+.divider {
+    display: inline-block;
+    width: 10px;
+    background-color: black;
+    margin: 0 10px;
+    height: 45em;
+    margin-left: 100px;
+    margin-right: 100px;
+  }
+  

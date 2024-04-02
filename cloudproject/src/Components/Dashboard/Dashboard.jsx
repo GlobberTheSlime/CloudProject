@@ -16,7 +16,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div>
+        <div style={{textAlign:'left'}}>
             <h1>Welcome to the Dengue Prediction Webapp!</h1>
             <div> 
                 <h2>Enter your latitude and longitude and let's see how fucked you are!</h2>

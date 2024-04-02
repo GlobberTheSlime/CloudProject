@@ -12,7 +12,7 @@ const data = [
  
 function Table() {
     return (
-            <table>
+            <table marginLeft={40}>
                 <tr>
                     <th>Date</th>
                     <th>Latitude</th>
