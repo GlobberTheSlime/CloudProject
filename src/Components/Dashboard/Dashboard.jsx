@@ -19,7 +19,7 @@ const Dashboard = () => {
         <div style={{textAlign:'left'}}>
             <h1>Welcome to the Dengue Prediction Webapp!</h1>
             <div> 
-                <h2>Enter your latitude and longitude and let's see how fucked you are!</h2>
+                <h2>Enter your latitude and longitude and let's see whats the dengue rating near you!</h2>
                 <form onSubmit={handleSubmit}>
                     <h3>Round off your inputs to 6 decimal places!!!</h3>
                         <div>
