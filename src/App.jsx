@@ -12,7 +12,7 @@ function App() {
       <div>
         <Dashboard/>
       </div>
-      <span class="divider" />
+      <span className="divider" />
       <div>
         <Table/>
       </div>
