@@ -2,17 +2,34 @@ import React, { useState } from "react";
 import CoordinateInput from 'react-coordinate-input';
 
 const Dashboard = () => {
-    const [latitude, setLatitude] = useState({
-        latitude: 0
-    });
-    const [longitude, setLongitude] = useState({
-        longitude: 0
-    })
+    const [latitude, setLatitude] = useState('');
+    const [longitude, setLongitude] = useState('');
+    const [result, setResult] = useState('');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(latitude);
-        console.log(longitude)
+        try {
+            // Ensure Pyodide is loaded
+            if (typeof window.pyodide === 'undefined') {
+                console.error('Pyodide is not loaded.');
+                return;
+            }
+
+            // Execute Python code using Pyodide
+            const pyCode = `
+                from algorithm.LoadAlgorithm import get_prediction
+                result = get_prediction(${longitude},${latitude});
+            `;
+            window.pyodide.runPython(pyCode);
+            
+        
+            // Get result from Pyodide
+            const pyResult = window.pyodide.globals.get('result');
+            setResult(pyResult);
+            console.log(result)
+        } catch (error) {
+            console.error('Error executing Python code:', error);
+        }
     };
 
     return (
