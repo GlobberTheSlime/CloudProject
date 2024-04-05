@@ -1,5 +1,5 @@
 // Filename - App.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Table.css';
 
 // Example of a data array that
@@ -10,7 +10,7 @@ const initialData = [
     { date: "26/01/24", lat: "1.359138", long: "103.615231" , rating: "1.2"},
 ];
 
-function Table() {
+function Table({queryLat , queryLong}) {
     const [data, setData] = useState(initialData);
 
     const updateTable = (date, lat, long, rating) => {
@@ -18,6 +18,16 @@ function Table() {
         newData.push({ date, lat, long, rating });
         setData(newData);
     };
+
+    
+    useEffect(() => {
+        const newData = [...data];
+        if(queryLat !=='' &&  queryLong !== '')
+        newData.push({date: "1/1/25",lat: queryLat,long: queryLong, rating: "0.5"});
+        setData(newData);
+
+        
+      }, [queryLat, queryLong]);
 
     return (
         <div>

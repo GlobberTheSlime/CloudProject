@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import CoordinateInput from 'react-coordinate-input';
 
-const Dashboard = () => {
+const Dashboard = ( {onQueryLat , onQueryLong}) => {
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [result, setResult] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        console.log(latitude)
+        console.log(longitude)
+
         try {
             // Ensure Pyodide is loaded
             if (typeof window.pyodide === 'undefined') {
@@ -32,6 +36,11 @@ const Dashboard = () => {
         }
     };
 
+    const latLong = () =>{
+        onQueryLat(latitude)
+        onQueryLong(longitude)
+    }
+
     return (
         <div style={{textAlign:'left'}}>
             <h1>Welcome to the Dengue Prediction Webapp!</h1>
@@ -44,7 +53,7 @@ const Dashboard = () => {
                                     <input type="number" min="0"  step="0.000001" value={latitude} onChange={(event) =>
 
                                         setLatitude(event.target.value)
-
+                                        
                                     }/>                    
                             </label>                           
                         </div>
@@ -53,12 +62,13 @@ const Dashboard = () => {
                                     <input type="number" min="0" step="0.000001" value={longitude} onChange={(event) =>
                                     
                                         setLongitude(event.target.value)
+                                        
                                     
                                     }/>                    
                             </label>                       
                         </div>
                         <div>
-                            <input type="submit" value="Submit"/>  
+                            <input type="submit" value="Submit" onClick={latLong}/>  
                         </div>
                 </form>
             </div>
