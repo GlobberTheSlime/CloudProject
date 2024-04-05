@@ -13,7 +13,7 @@ const initialData = [
 function Table() {
     const [data, setData] = useState(initialData);
 
-    const updateTable = (lat, long, date, rating) => {
+    const updateTable = (date, lat, long, rating) => {
         const newData = [...data];
         newData.push({ date, lat, long, rating });
         setData(newData);
@@ -42,7 +42,7 @@ function Table() {
             </tbody>
             </table>
             <button onClick={() => 
-                updateTable("1.123456", "103.654321", "1/1/25", "0.5")}>
+                updateTable("1/1/25", "1.123456", "103.654321", "0.5")}>
                 Refresh Table
             </button>
         </div>
