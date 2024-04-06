@@ -6,11 +6,19 @@ function Table() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const cookieData = getCookie('myData');
-    if (cookieData) {
-      const parsedData = JSON.parse(cookieData);
-      setData(parsedData);
-    }
+    // Retrieve existing data from the cookie
+    const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
+
+    // Format the existing data for display in the table
+    const formattedData = existingData.map(entry => ({
+        date: entry.date,
+        lat: entry.lat.toString(),
+        long: entry.long.toString(),
+        rating: entry.rating.toString()
+}));
+
+// Update the state with the formatted data
+setData(formattedData);
   }, []);
 
   const getCookie = (name) => {
