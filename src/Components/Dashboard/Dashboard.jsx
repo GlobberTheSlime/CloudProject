@@ -47,22 +47,23 @@ const Dashboard = ( {onQueryLat , onQueryLong , onQueryResult}) => {
             const date = today. getDate();
             const currentDate = month + "/" + date + "/" + year;
 
-            //Insert data to store into cookie
-            const data = {
+            // Retrieve existing data from the cookie
+            const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
+
+            // Create a new entry
+            const newEntry = {
                 date: currentDate,
                 long: longitude,
                 lat: latitude,
                 rating: result.result
-            }
- 
-            // Retrieve existing data from the cookie
-            const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
+            };
 
             // Add the new entry to existing data
-            const updatedData = [...existingData, newData];
+            const updatedData = [...existingData, newEntry];
 
             // Store updated data in the cookie
             document.cookie = `myData=${JSON.stringify(updatedData)}; path=/`;
+
         })
         .catch(error => {
             console.error('Error calling Python function:', error);
