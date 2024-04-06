@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CoordinateInput from 'react-coordinate-input';
 
 const Dashboard = ( {onQueryLat , onQueryLong , onQueryResult}) => {
@@ -36,21 +36,22 @@ const Dashboard = ( {onQueryLat , onQueryLong , onQueryResult}) => {
             const date = today. getDate();
             const currentDate = month + "/" + date + "/" + year;
 
-            //Insert data into database
+            //Insert data to store into cookie
             const data = {
                 date: currentDate,
                 long: longitude,
                 lat: latitude,
                 rating: result.result
             }
-            fetch(`http://${hostname}:5000/insert-data`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-                mode: 'cors',  // Include CORS headers in the request
-            })
+ 
+            // Retrieve existing data from the cookie
+            const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
+
+            // Add the new entry to existing data
+            const updatedData = [...existingData, newData];
+
+            // Store updated data in the cookie
+            document.cookie = `myData=${JSON.stringify(updatedData)}; path=/`;
         })
         .catch(error => {
             console.error('Error calling Python function:', error);
