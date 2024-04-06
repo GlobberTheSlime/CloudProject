@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CoordinateInput from 'react-coordinate-input';
 
-const Dashboard = ( {onQueryLat , onQueryLong}) => {
+const Dashboard = ( {onQueryLat , onQueryLong , onQueryResult}) => {
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [result, setResult] = useState('');
@@ -25,6 +25,7 @@ const Dashboard = ( {onQueryLat , onQueryLong}) => {
         .then(result => {
             console.log('Result from Python function:', result.result);
             setResult(result.result);
+            onQueryResult(result.result);
         })
         .catch(error => {
             console.error('Error calling Python function:', error);

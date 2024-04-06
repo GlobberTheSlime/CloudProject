@@ -8,15 +8,16 @@ function App() {
   // const [count, setCount] = useState(0)
   const [queryLat, setQueryLat] = useState('');
   const [queryLong, setQueryLong] = useState('');
+  const [queryResult, setQueryResult] = useState('');
 
   return (
     <div className="App">
       <div>
-        <Dashboard onQueryLat={setQueryLat} onQueryLong ={setQueryLong} />
+        <Dashboard onQueryLat={setQueryLat} onQueryLong ={setQueryLong} onQueryResult ={setQueryResult}/>
       </div>
       <span className="divider" />
       <div>
-        <Table queryLat={queryLat} queryLong={queryLong}/>
+        <Table queryLat={queryLat} queryLong={queryLong} queryResult={queryResult}/>
       </div>
       {/* <div>
         <a href="https://vitejs.dev" target="_blank">
