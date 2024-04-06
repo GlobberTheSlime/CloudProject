@@ -67,66 +67,6 @@ def invoke_function():
     result = get_prediction(data['long'], data['lat'])
     return {'result': result}
 
-
-
-def getdatabase():
-
-    # Establish database connection
-    connection = pymysql.connect(host='cloudprojectdb.cjwqocie06xh.us-east-1.rds.amazonaws.com', user='admin', password='password1', db='cloudprojectdb')
-    cursor = connection.cursor(pymysql.cursors.DictCursor)
-
-    print("Connected to database sucessfully")
-    
-    # Execute SQL query to retrieve data
-    sql = "SELECT * FROM your_table"
-    cursor.execute(sql)
-    data = cursor.fetchall()
-
-    # Close database connection
-    cursor.close()
-    connection.close()
-
-    return data
-
-def setdatabase(date, lat, long, rating):
-    # Establish database connection
-    connection = pymysql.connect(host='cloudprojectdb.cjwqocie06xh.us-east-1.rds.amazonaws.com', user='admin', password='password1', db='cloudprojectdb')
-    cursor = connection.cursor()
-
-    print("Connected to database sucessfully")
-
-    # Execute SQL query to insert data
-    sql = "INSERT INTO your_table (date, lat, long, rating) VALUES (%s, %s, %s, %s)"
-    cursor.execute(sql, (date, lat, long, rating))
-
-    # Commit changes and close database connection
-    connection.commit()
-    cursor.close()
-    connection.close()
-
-#invoking
-@app.route('/get-database', methods=['GET'])
-def get_database():
-    # Call get_database function to retrieve data from the database
-    data = getdatabase()
-    # Process data and return response
-    return jsonify(data)
-
-@app.route('/insert-data', methods=['POST'])
-def insert_data():
-    # Get data from request
-    data = request.json
-    date = data['date']
-    lat = data['lat']
-    long = data['long']
-    rating = data['rating']
-
-    # Call set_database function to insert data into the database
-    setdatabase(date, lat, long, rating)
-
-    # Return success response
-    return jsonify({'message': 'Data inserted successfully'})
-
 #If invalid lat long was provided, throw an error
 def get_prediction(long, lat):
     clusters = extractor.get_clusters(long, lat)
