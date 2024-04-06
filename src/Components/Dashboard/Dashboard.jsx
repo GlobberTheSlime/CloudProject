@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import CoordinateInput from 'react-coordinate-input';
 
+function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        return cookie.substring(name.length + 1);
+      }
+    }
+    return '';
+}
+
 const Dashboard = ( {onQueryLat , onQueryLong , onQueryResult}) => {
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');

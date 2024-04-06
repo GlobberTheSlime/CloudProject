@@ -8,33 +8,55 @@ const initialData = [
     { date: "26/01/24", lat: "1.359138", long: "103.615231" , rating: "1.2"},
 ];
 
-const Table = () => {
+import React, { useEffect, useState } from 'react';
+
+function Table() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Retrieve data from cookie
     const cookieData = getCookie('myData');
     if (cookieData) {
-      setData(JSON.parse(cookieData));
+      const parsedData = JSON.parse(cookieData);
+      setData(parsedData);
     }
   }, []);
 
+  const getCookie = (name) => {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        return cookie.substring(name.length + 1);
+      }
+    }
+    return '';
+  };
+
   return (
     <div>
-      <h2>History</h2>
-      <ul>
-        {data.map((entry, index) => (
-          <li key={index}>
-            <span>Date: {entry.date}</span>
-            <span>Latitude: {entry.lat}</span>
-            <span>Longitude: {entry.long}</span>
-            <span>Rating: {entry.rating}</span>
-          </li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((entry, index) => (
+            <tr key={index}>
+              <td>{entry.date}</td>
+              <td>{entry.lat}</td>
+              <td>{entry.long}</td>
+              <td>{entry.rating}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
+}
 
 export default Table;
 
