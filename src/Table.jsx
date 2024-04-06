@@ -10,8 +10,9 @@ const getCookie = (name) => {
 };
 
 const clearCookie = () => {
-  document.cookie = 'myData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  document.cookie = 'myData=; path=/';
 };
+
 
 function Table({ queryLat, queryLong, queryResult }) {
   const [data, setData] = useState([]);
