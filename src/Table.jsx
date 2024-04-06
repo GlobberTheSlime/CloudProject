@@ -22,8 +22,13 @@ function Table({queryLat , queryLong , queryResult}) {
     
     useEffect(() => {
         const newData = [...data];
+        const today = new Date();
+        const month = today.getMonth()+1;
+        const year = today.getFullYear();
+        const date = today. getDate();
+        const currentDate = month + "/" + date + "/" + year;
         if(queryLat !=='' &&  queryLong !== '')
-        newData.push({date: "1/1/25",lat: queryLat,long: queryLong, rating: queryResult});
+        newData.push({date: currentDate,lat: queryLat,long: queryLong, rating: queryResult});
         setData(newData);
 
         }, [queryResult]);
