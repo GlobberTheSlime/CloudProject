@@ -2,6 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import './Table.css';
 
+// Define the getCookie function
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+};
+
 const Table = () => {
   const [tableData, setTableData] = useState([]);
 
