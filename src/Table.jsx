@@ -19,12 +19,20 @@ function Table({queryLat , queryLong , queryResult}) {
         fetch('get-database')
             .then(response => response.json())
             .then(data => {
-                setData(data); // Update state with retrieved data
+                // Convert the data to the desired format
+                const formattedData = data.map(item => ({
+                    date: item.date,
+                    lat: item.lat.toString(), // Convert to string if needed
+                    long: item.long.toString(), // Convert to string if needed
+                    rating: item.rating.toString() // Convert to string if needed
+                }));
+                setData(formattedData); // Update state with formatted data
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
     }, []); // Empty dependency array ensures the effect runs only once after the component mounts
+    
     // const [data, setData] = useState(initialData);
 
     // const updateTable = (date, lat, long, rating) => {
