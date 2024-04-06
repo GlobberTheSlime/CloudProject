@@ -6,15 +6,17 @@ import Table from './Table'
 
 function App() {
   // const [count, setCount] = useState(0)
+  const [queryLat, setQueryLat] = useState('');
+  const [queryLong, setQueryLong] = useState('');
 
   return (
     <div className="App">
       <div>
-        <Dashboard/>
+        <Dashboard onQueryLat={setQueryLat} onQueryLong ={setQueryLong} />
       </div>
       <span className="divider" />
       <div>
-        <Table/>
+        <Table queryLat={queryLat} queryLong={queryLong}/>
       </div>
       {/* <div>
         <a href="https://vitejs.dev" target="_blank">

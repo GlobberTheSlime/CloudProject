@@ -1,21 +1,13 @@
 import React, { useState } from "react";
 import CoordinateInput from 'react-coordinate-input';
 
-const Dashboard = () => {
+const Dashboard = ( {onQueryLat , onQueryLong}) => {
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [result, setResult] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // const humidity_url = 'https://api.data.gov.sg/v1/environment/relative-humidity';
-        // const temp_url = 'https://api.data.gov.sg/v1/environment/air-temperature';
-        // const rainfall_url = 'https://api.data.gov.sg/v1/environment/rainfall';
-
-        // // Fetch data from each URL
-        // var humidityData = await fetchData(humidity_url);
-        // var tempData = await fetchData(temp_url);
-        // var rainfallData = await fetchData(rainfall_url);
         const data = {
             long: longitude,
             lat: latitude  // Example data to be passed to the function
@@ -40,6 +32,11 @@ const Dashboard = () => {
         
     };
 
+    const latLong = () =>{
+        onQueryLat(latitude)
+        onQueryLong(longitude)
+    }
+
     return (
         <div style={{textAlign:'left'}}>
             <h1>Welcome to the Dengue Prediction Webapp!</h1>
@@ -52,7 +49,7 @@ const Dashboard = () => {
                                     <input type="number" min="0"  step="0.000001" value={latitude} onChange={(event) =>
 
                                         setLatitude(event.target.value)
-
+                                        
                                     }/>                    
                             </label>                           
                         </div>
@@ -61,12 +58,13 @@ const Dashboard = () => {
                                     <input type="number" min="0" step="0.000001" value={longitude} onChange={(event) =>
                                     
                                         setLongitude(event.target.value)
+                                        
                                     
                                     }/>                    
                             </label>                       
                         </div>
                         <div>
-                            <input type="submit" value="Submit"/>  
+                            <input type="submit" value="Submit" onClick={latLong}/>  
                         </div>
                 </form>
             </div>
