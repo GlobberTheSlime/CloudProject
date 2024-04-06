@@ -10,7 +10,7 @@ const initialData = [
     { date: "26/01/24", lat: "1.359138", long: "103.615231" , rating: "1.2"},
 ];
 
-function Table({queryLat , queryLong}) {
+function Table({queryLat , queryLong , queryResult}) {
     const [data, setData] = useState(initialData);
 
     const updateTable = (date, lat, long, rating) => {
@@ -22,12 +22,17 @@ function Table({queryLat , queryLong}) {
     
     useEffect(() => {
         const newData = [...data];
+        const today = new Date();
+        const month = today.getMonth()+1;
+        const year = today.getFullYear();
+        const date = today. getDate();
+        const currentDate = month + "/" + date + "/" + year;
         if(queryLat !=='' &&  queryLong !== '')
-        newData.push({date: "1/1/25",lat: queryLat,long: queryLong, rating: "0.5"});
+        newData.push({date: currentDate,lat: queryLat,long: queryLong, rating: queryResult});
         setData(newData);
 
-        
-      }, [queryLat, queryLong]);
+        }, [queryResult]);
+      //}, [queryLat, queryLong]);
 
     return (
         <div>
