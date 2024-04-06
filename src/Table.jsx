@@ -25,7 +25,7 @@ const Table = () => {
     fetchCookieData();
 
     // Subscribe to changes in the cookie data
-    const interval = setInterval(fetchCookieData, 1000); // Check for changes every second
+    const interval = setInterval(fetchCookieData, 100); // Check for changes every second
 
     // Clean up on component unmount
     return () => clearInterval(interval);
