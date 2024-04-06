@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Example of a data array that
 // you might receive from an API
@@ -7,8 +7,6 @@ const initialData = [
     { date: "25/01/24", lat: "1.357293", long: "103.445326" , rating: "0.3"},
     { date: "26/01/24", lat: "1.359138", long: "103.615231" , rating: "1.2"},
 ];
-
-import React, { useEffect, useState } from 'react';
 
 const Table = () => {
   const [data, setData] = useState([]);
