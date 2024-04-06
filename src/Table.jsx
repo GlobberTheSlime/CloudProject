@@ -12,27 +12,29 @@ const getCookie = (name) => {
 function Table({ queryLat, queryLong, queryResult }) {
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    // Function to parse and format the cookie data
-    const parseCookieData = () => {
-      const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
-      return existingData.map(entry => ({
-        date: entry.date,
-        lat: entry.lat.toString(),
-        long: entry.long.toString(),
-        rating: entry.rating.toString()
-      }));
-    };
+  // Function to parse and format the cookie data
+  const parseCookieData = () => {
+    const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
+    return existingData.map(entry => ({
+      date: entry.date,
+      lat: entry.lat.toString(),
+      long: entry.long.toString(),
+      rating: entry.rating.toString()
+    }));
+  };
 
+  useEffect(() => {
     // Set initial data from the cookie
     setData(parseCookieData());
+  }, []);
 
-    // Function to handle changes in the cookie data
-    const handleCookieChange = () => {
-      setData(parseCookieData());
-    };
+  // Function to handle changes in the cookie data
+  const handleCookieChange = () => {
+    setData(parseCookieData());
+  };
 
-    // Listen for changes in the cookie data
+  // Listen for changes in the cookie data
+  useEffect(() => {
     window.addEventListener('storage', handleCookieChange);
 
     // Cleanup function to remove the event listener
