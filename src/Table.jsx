@@ -16,21 +16,28 @@ function Table({queryLat , queryLong , queryResult}) {
 
     useEffect(() => {
         // Fetch data from the backend when the component mounts
-        fetch('http://${hostname}:5000/get-database')
-            .then(response => response.json())
-            .then(data => {
-                // Convert the data to the desired format
-                const formattedData = data.map(item => ({
-                    date: item.date,
-                    lat: item.lat.toString(), // Convert to string if needed
-                    long: item.long.toString(), // Convert to string if needed
-                    rating: item.rating.toString() // Convert to string if needed
-                }));
-                setData(formattedData); // Update state with formatted data
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
+        fetch(`http://${hostname}:5000/get-database`, {
+            method: 'GET',
+            mode: 'cors',  // Include CORS headers in the request
+            headers: {
+                'Content-Type': 'application/json'
+                // Add any other headers if needed
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Convert the data to the desired format
+            const formattedData = data.map(item => ({
+                date: item.date,
+                lat: item.lat.toString(), // Convert to string if needed
+                long: item.long.toString(), // Convert to string if needed
+                rating: item.rating.toString() // Convert to string if needed
+            }));
+            setData(formattedData); // Update state with formatted data
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
     }, []); // Empty dependency array ensures the effect runs only once after the component mounts
     
     // const [data, setData] = useState(initialData);
