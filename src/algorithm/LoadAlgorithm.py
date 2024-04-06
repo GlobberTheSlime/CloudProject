@@ -68,16 +68,14 @@ def invoke_function():
     return {'result': result}
 
 
-# Database connection details
-db_host = 'cloudprojectdb.cjwqocie06xh.us-east-1.rds.amazonaws.com'
-db_user = 'admin'
-db_password = 'password1'
-db_name = 'cloudprojectdb'
 
 def getdatabase():
+
     # Establish database connection
-    connection = pymysql.connect(host=db_host, user=db_user, password=db_password, db=db_name)
+    connection = pymysql.connect(host='cloudprojectdb.cjwqocie06xh.us-east-1.rds.amazonaws.com', user='admin', password='password1', db='cloudprojectdb')
     cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+    print("Connected to database sucessfully")
     
     # Execute SQL query to retrieve data
     sql = "SELECT * FROM your_table"
@@ -92,8 +90,10 @@ def getdatabase():
 
 def setdatabase(date, lat, long, rating):
     # Establish database connection
-    connection = pymysql.connect(host=db_host, user=db_user, password=db_password, db=db_name)
+    connection = pymysql.connect(host='cloudprojectdb.cjwqocie06xh.us-east-1.rds.amazonaws.com', user='admin', password='password1', db='cloudprojectdb')
     cursor = connection.cursor()
+
+    print("Connected to database sucessfully")
 
     # Execute SQL query to insert data
     sql = "INSERT INTO your_table (date, lat, long, rating) VALUES (%s, %s, %s, %s)"
@@ -104,7 +104,7 @@ def setdatabase(date, lat, long, rating):
     cursor.close()
     connection.close()
 
-#invoking functions
+#invoking
 @app.route('/get-database', methods=['GET'])
 def get_database():
     # Call get_database function to retrieve data from the database
