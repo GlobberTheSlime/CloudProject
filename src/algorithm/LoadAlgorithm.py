@@ -1,9 +1,12 @@
 import joblib
 import numpy as np
 import requests
+import pymysql
+
 from sklearn.ensemble import GradientBoostingRegressor
 from flask import *
 from flask_cors import CORS  # Import CORS from flask_cors module
+
 
 from Extractor import Extractor
 
@@ -63,6 +66,64 @@ def invoke_function():
     # Call the function with the parameters
     result = get_prediction(data['long'], data['lat'])
     return {'result': result}
+
+# Database connection details
+db_host = 'cloudprojectdb.cjwqocie06xh.us-east-1.rds.amazonaws.com'
+db_user = 'admin'
+db_password = 'password1'
+db_name = 'cloudprojectdb'
+
+def getdatabase():
+    # Establish database connection
+    connection = pymysql.connect(host=db_host, user=db_user, password=db_password, db=db_name)
+    cursor = connection.cursor(pymysql.cursors.DictCursor)
+    
+    # Execute SQL query to retrieve data
+    sql = "SELECT * FROM your_table"
+    cursor.execute(sql)
+    data = cursor.fetchall()
+
+    # Close database connection
+    cursor.close()
+    connection.close()
+
+    return data
+
+def setdatabase(date, lat, long, rating):
+    # Establish database connection
+    connection = pymysql.connect(host=db_host, user=db_user, password=db_password, db=db_name)
+    cursor = connection.cursor()
+
+    # Execute SQL query to insert data
+    sql = "INSERT INTO your_table (date, lat, long, rating) VALUES (%s, %s, %s, %s)"
+    cursor.execute(sql, (date, lat, long, rating))
+
+    # Commit changes and close database connection
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+@app.route('/get-database', methods=['GET'])
+def get_database():
+    # Call get_database function to retrieve data from the database
+    data = getdatabase()
+    # Process data and return response
+    return jsonify(data)
+
+@app.route('/insert-data', methods=['POST'])
+def insert_data():
+    # Get data from request
+    data = request.json
+    date = data['date']
+    lat = data['lat']
+    long = data['long']
+    rating = data['rating']
+
+    # Call set_database function to insert data into the database
+    setdatabase(date, lat, long, rating)
+
+    # Return success response
+    return jsonify({'message': 'Data inserted successfully'})
 
 #If invalid lat long was provided, throw an error
 def get_prediction(long, lat):

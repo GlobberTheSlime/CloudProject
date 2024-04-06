@@ -28,6 +28,29 @@ const Dashboard = ( {onQueryLat , onQueryLong , onQueryResult}) => {
             console.log('Result from Python function:', result.result);
             setResult(result.result);
             onQueryResult(result.result);
+
+            //Get current Date
+            const today = new Date();
+            const month = today.getMonth()+1;
+            const year = today.getFullYear();
+            const date = today. getDate();
+            const currentDate = month + "/" + date + "/" + year;
+            
+            //Insert data into database
+            const data = {
+                date: currentData,
+                long: longitude,
+                lat: latitude,
+                rating: result.result
+            }
+            fetch(`http://${hostname}:5000/insert-data`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+                mode: 'cors',  // Include CORS headers in the request
+            })
         })
         .catch(error => {
             console.error('Error calling Python function:', error);

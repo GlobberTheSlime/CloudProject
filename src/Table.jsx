@@ -11,27 +11,39 @@ const initialData = [
 ];
 
 function Table({queryLat , queryLong , queryResult}) {
-    const [data, setData] = useState(initialData);
 
-    const updateTable = (date, lat, long, rating) => {
-        const newData = [...data];
-        newData.push({ date, lat, long, rating });
-        setData(newData);
-    };
+    const [data, setData] = useState([]);
 
-    
     useEffect(() => {
-        const newData = [...data];
-        const today = new Date();
-        const month = today.getMonth()+1;
-        const year = today.getFullYear();
-        const date = today. getDate();
-        const currentDate = month + "/" + date + "/" + year;
-        if(queryLat !=='' &&  queryLong !== '')
-        newData.push({date: currentDate,lat: queryLat,long: queryLong, rating: queryResult});
-        setData(newData);
+        // Fetch data from the backend when the component mounts
+        fetch('http://${hostname}:5000/get-database')
+            .then(response => response.json())
+            .then(data => {
+                setData(data); // Update state with retrieved data
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }, []); // Empty dependency array ensures the effect runs only once after the component mounts
+    // const [data, setData] = useState(initialData);
 
-        }, [queryResult]);
+    // const updateTable = (date, lat, long, rating) => {
+    //     const newData = [...data];
+    //     newData.push({ date, lat, long, rating });
+    //     setData(newData);
+    // };
+    // useEffect(() => {
+    //     const newData = [...data];
+    //     const today = new Date();
+    //     const month = today.getMonth()+1;
+    //     const year = today.getFullYear();
+    //     const date = today. getDate();
+    //     const currentDate = month + "/" + date + "/" + year;
+    //     if(queryLat !=='' &&  queryLong !== '')
+    //     newData.push({date: currentDate,lat: queryLat,long: queryLong, rating: queryResult});
+    //     setData(newData);
+
+    //     }, [queryResult]);
       //}, [queryLat, queryLong]);
 
     return (
