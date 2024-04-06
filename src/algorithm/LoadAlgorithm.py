@@ -18,7 +18,7 @@ def get_public_ip():
         return "localhost"
 print (get_public_ip())
 app = Flask(__name__)
-CORS(app, resources={r"/invoke-function": {"origins": f"http://{get_public_ip()}:5173"}})
+CORS(app)
 
 
 
