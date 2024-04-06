@@ -2,35 +2,31 @@
 import React, { useEffect, useState } from 'react';
 import './Table.css';
 
-function Table() {
+// Define the getCookie function
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function Table({ queryLat, queryLong, queryResult }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Retrieve existing data from the cookie
-    const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
+      // Retrieve existing data from the cookie
+      const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
 
-    // Format the existing data for display in the table
-    const formattedData = existingData.map(entry => ({
-        date: entry.date,
-        lat: entry.lat.toString(),
-        long: entry.long.toString(),
-        rating: entry.rating.toString()
-    }));
+      // Format the existing data for display in the table
+      const formattedData = existingData.map(entry => ({
+          date: entry.date,
+          lat: entry.lat.toString(),
+          long: entry.long.toString(),
+          rating: entry.rating.toString()
+      }));
 
-    // Update the state with the formatted data
-    setData(formattedData);
-}, [getCookie('myData')]); // Trigger the effect when the cookie data changes
-
-  const getCookie = (name) => {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.startsWith(name + '=')) {
-        return cookie.substring(name.length + 1);
-      }
-    }
-    return '';
-  };
+      // Update the state with the formatted data
+      setData(formattedData);
+  }, []);
 
   return (
     <div>
