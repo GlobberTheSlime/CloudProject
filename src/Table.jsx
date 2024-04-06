@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import './Table.css';
 
-import React, { useState, useEffect } from 'react';
-
 // Define the getCookie function
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
