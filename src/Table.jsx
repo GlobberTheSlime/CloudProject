@@ -2,50 +2,31 @@
 import React, { useEffect, useState } from 'react';
 import './Table.css';
 
-// Define the getCookie function
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-}
-
-function Table({ queryLat, queryLong, queryResult }) {
-  const [data, setData] = useState([]);
-
-  // Function to parse and format the cookie data
-  const parseCookieData = () => {
-    const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
-    return existingData.map(entry => ({
-      date: entry.date,
-      lat: entry.lat.toString(),
-      long: entry.long.toString(),
-      rating: entry.rating.toString()
-    }));
-  };
+const Table = () => {
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    // Set initial data from the cookie
-    setData(parseCookieData());
-  }, []);
-
-  // Function to handle changes in the cookie data
-  const handleCookieChange = () => {
-    setData(parseCookieData());
-  };
-
-  // Listen for changes in the cookie data
-  useEffect(() => {
-    window.addEventListener('storage', handleCookieChange);
-
-    // Cleanup function to remove the event listener
-    return () => {
-      window.removeEventListener('storage', handleCookieChange);
+    // Function to retrieve data from cookie
+    const fetchCookieData = () => {
+      const cookieData = getCookie('myData');
+      if (cookieData) {
+        setTableData(JSON.parse(cookieData));
+      }
     };
-  }, []);
+
+    // Fetch data from cookie initially
+    fetchCookieData();
+
+    // Subscribe to changes in the cookie data
+    const interval = setInterval(fetchCookieData, 1000); // Check for changes every second
+
+    // Clean up on component unmount
+    return () => clearInterval(interval);
+  }, []); // Only run once on component mount
 
   return (
     <div>
-      <table style={{ marginLeft: 40 }}>
+      <table>
         <thead>
           <tr>
             <th>Date</th>
@@ -55,21 +36,22 @@ function Table({ queryLat, queryLong, queryResult }) {
           </tr>
         </thead>
         <tbody>
-          {data.slice(-15).map((val, key) => (
-            <tr key={key}>
-              <td>{val.date}</td>
-              <td>{val.lat}</td>
-              <td>{val.long}</td>
-              <td>{val.rating}</td>
+          {tableData.map((entry, index) => (
+            <tr key={index}>
+              <td>{entry.date}</td>
+              <td>{entry.lat}</td>
+              <td>{entry.long}</td>
+              <td>{entry.rating}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-}
+};
 
 export default Table;
+
 
 
 // Example of a data array that
