@@ -13,7 +13,9 @@ const Dashboard = ( {onQueryLat , onQueryLong}) => {
             lat: latitude  // Example data to be passed to the function
         };
         
-        fetch('http://localhost:5000/invoke-function', {
+        const hostname = window.location.hostname;
+        console.log(hostname)
+        fetch(`http://${hostname}:5000/invoke-function`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -111,4 +111,5 @@ rainfall_data = get_data(rainfall_url)
 
 gradient: GradientBoostingRegressor = joblib.load('gradient.pkl')
 extractor: Extractor = joblib.load('extractor.pkl')
+get_prediction(103.9,1.39)
 app.run(debug=True)  # Run the Flask app
