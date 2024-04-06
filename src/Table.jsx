@@ -2,40 +2,31 @@
 import React, { useEffect, useState } from 'react';
 import './Table.css';
 
-// Define the getCookie function
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-};
-
-const clearCookie = () => {
-  document.cookie = 'myData=; path=/';
-};
-
-
-function Table({ queryLat, queryLong, queryResult }) {
-  const [data, setData] = useState([]);
+const Table = () => {
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    // Retrieve existing data from the cookie
-    const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
+    // Function to retrieve data from cookie
+    const fetchCookieData = () => {
+      const cookieData = getCookie('myData');
+      if (cookieData) {
+        setTableData(JSON.parse(cookieData));
+      }
+    };
 
-    // Format the existing data for display in the table
-    const formattedData = existingData.map(entry => ({
-      date: entry.date,
-      lat: entry.lat.toString(),
-      long: entry.long.toString(),
-      rating: entry.rating.toString()
-    }));
+    // Fetch data from cookie initially
+    fetchCookieData();
 
-    // Update the state with the formatted data
-    setData(formattedData);
-  }, []);
+    // Subscribe to changes in the cookie data
+    const interval = setInterval(fetchCookieData, 1000); // Check for changes every second
+
+    // Clean up on component unmount
+    return () => clearInterval(interval);
+  }, []); // Only run once on component mount
 
   return (
     <div>
-      <table style={{ marginLeft: 40 }}>
+      <table>
         <thead>
           <tr>
             <th>Date</th>
@@ -45,23 +36,21 @@ function Table({ queryLat, queryLong, queryResult }) {
           </tr>
         </thead>
         <tbody>
-          {data.slice(-15).map((val, key) => (
-            <tr key={key}>
-              <td>{val.date}</td>
-              <td>{val.lat}</td>
-              <td>{val.long}</td>
-              <td>{val.rating}</td>
+          {tableData.map((entry, index) => (
+            <tr key={index}>
+              <td>{entry.date}</td>
+              <td>{entry.lat}</td>
+              <td>{entry.long}</td>
+              <td>{entry.rating}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={clearCookie}>Clear History</button>
     </div>
   );
-}
+};
 
 export default Table;
-
 
 
 
