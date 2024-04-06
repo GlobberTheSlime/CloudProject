@@ -13,19 +13,32 @@ function Table({ queryLat, queryLong, queryResult }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-      // Retrieve existing data from the cookie
+    // Function to parse and format the cookie data
+    const parseCookieData = () => {
       const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
-
-      // Format the existing data for display in the table
-      const formattedData = existingData.map(entry => ({
-          date: entry.date,
-          lat: entry.lat.toString(),
-          long: entry.long.toString(),
-          rating: entry.rating.toString()
+      return existingData.map(entry => ({
+        date: entry.date,
+        lat: entry.lat.toString(),
+        long: entry.long.toString(),
+        rating: entry.rating.toString()
       }));
+    };
 
-      // Update the state with the formatted data
-      setData(formattedData);
+    // Set initial data from the cookie
+    setData(parseCookieData());
+
+    // Function to handle changes in the cookie data
+    const handleCookieChange = () => {
+      setData(parseCookieData());
+    };
+
+    // Listen for changes in the cookie data
+    window.addEventListener('storage', handleCookieChange);
+
+    // Cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener('storage', handleCookieChange);
+    };
   }, []);
 
   return (
@@ -55,6 +68,7 @@ function Table({ queryLat, queryLong, queryResult }) {
 }
 
 export default Table;
+
 
 // Example of a data array that
 // you might receive from an API
