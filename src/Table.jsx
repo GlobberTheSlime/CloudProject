@@ -15,6 +15,7 @@ function Table({queryLat , queryLong , queryResult}) {
     const [data, setData] = useState([]);
 
     useEffect(() => {
+        const hostname = window.location.hostname;
         // Fetch data from the backend when the component mounts
         fetch(`http://${hostname}:5000/get-database`, {
             method: 'GET',
