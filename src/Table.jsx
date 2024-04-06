@@ -21,7 +21,6 @@ function Table() {
     setData(formattedData);
 }, [getCookie('myData')]); // Trigger the effect when the cookie data changes
 
-
   const getCookie = (name) => {
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
