@@ -7,10 +7,20 @@ from flask_cors import CORS  # Import CORS from flask_cors module
 
 from Extractor import Extractor
 
-
-
+def get_public_ip():
+    try:
+        response = requests.get('https://api.ipify.org')
+        if response.status_code == 200:
+            return response.text
+        else:
+            print("Failed to retrieve public IP:", response.status_code)
+    except Exception as e:
+        return "localhost"
+print (get_public_ip())
 app = Flask(__name__)
-CORS(app, resources={r"/invoke-function": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/invoke-function": {"origins": f"http://{get_public_ip()}:5173"}})
+
+
 
 def get_data(url):
     response = requests.get(url)
