@@ -35,10 +35,10 @@ const Dashboard = ( {onQueryLat , onQueryLong , onQueryResult}) => {
             const year = today.getFullYear();
             const date = today. getDate();
             const currentDate = month + "/" + date + "/" + year;
-            
+
             //Insert data into database
             const data = {
-                date: currentData,
+                date: currentDate,
                 long: longitude,
                 lat: latitude,
                 rating: result.result

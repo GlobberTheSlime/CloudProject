@@ -16,7 +16,7 @@ function Table({queryLat , queryLong , queryResult}) {
 
     useEffect(() => {
         // Fetch data from the backend when the component mounts
-        fetch('http://${hostname}:5000/get-database')
+        fetch('get-database')
             .then(response => response.json())
             .then(data => {
                 setData(data); // Update state with retrieved data

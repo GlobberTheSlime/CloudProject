@@ -67,6 +67,7 @@ def invoke_function():
     result = get_prediction(data['long'], data['lat'])
     return {'result': result}
 
+
 # Database connection details
 db_host = 'cloudprojectdb.cjwqocie06xh.us-east-1.rds.amazonaws.com'
 db_user = 'admin'
@@ -103,6 +104,7 @@ def setdatabase(date, lat, long, rating):
     cursor.close()
     connection.close()
 
+#invoking functions
 @app.route('/get-database', methods=['GET'])
 def get_database():
     # Call get_database function to retrieve data from the database
