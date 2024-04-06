@@ -8,28 +8,36 @@ const Dashboard = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
-            // Ensure Pyodide is loaded
-            if (typeof window.pyodide === 'undefined') {
-                console.error('Pyodide is not loaded.');
-                return;
-            }
+        // const humidity_url = 'https://api.data.gov.sg/v1/environment/relative-humidity';
+        // const temp_url = 'https://api.data.gov.sg/v1/environment/air-temperature';
+        // const rainfall_url = 'https://api.data.gov.sg/v1/environment/rainfall';
 
-            // Execute Python code using Pyodide
-            const pyCode = `
-                from algorithm.LoadAlgorithm import get_prediction
-                result = get_prediction(${longitude},${latitude});
-            `;
-            window.pyodide.runPython(pyCode);
-            
+        // // Fetch data from each URL
+        // var humidityData = await fetchData(humidity_url);
+        // var tempData = await fetchData(temp_url);
+        // var rainfallData = await fetchData(rainfall_url);
+        const data = {
+            long: longitude,
+            lat: latitude  // Example data to be passed to the function
+        };
         
-            // Get result from Pyodide
-            const pyResult = window.pyodide.globals.get('result');
-            setResult(pyResult);
-            console.log(result)
-        } catch (error) {
-            console.error('Error executing Python code:', error);
-        }
+        fetch('http://localhost:5000/invoke-function', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+            mode: 'cors',  // Include CORS headers in the request
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Result from Python function:', result.result);
+            setResult(result.result);
+        })
+        .catch(error => {
+            console.error('Error calling Python function:', error);
+        });
+        
     };
 
     return (

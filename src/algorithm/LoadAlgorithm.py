@@ -1,15 +1,18 @@
 import joblib
-import numpy
 import numpy as np
 import requests
-from matplotlib import pyplot as plt
 from sklearn.ensemble import GradientBoostingRegressor
+from flask import *
+from flask_cors import CORS  # Import CORS from flask_cors module
 
-from src.Extractor import Extractor
+from Extractor import Extractor
+
+
+
+app = Flask(__name__)
+CORS(app, resources={r"/invoke-function": {"origins": "http://localhost:5173"}})
 
 def get_data(url):
-
-
     response = requests.get(url)
     readings_map = {}
     if response.status_code == 200:
@@ -35,23 +38,6 @@ def process_stations(stations_data):
         unique_stations[station['id']] = (pos['latitude'], pos['longitude'])
     return unique_stations
 
-#if none in cluster , use average
-temp_data = get_data(temp_url)
-#if none in cluster, use average
-humidity_data = get_data(humidity_url)
-#if none in cluster, assume 0 rainfall
-rainfall_data = get_data(rainfall_url)
-
-
-
-# container = {}
-#
-# stations_map = process_stations(stations)
-
-# for date, data in rainfall_data.items():
-#     process_data(container,data,date)
-
-
 def get_in_cluster(data:dict, clusters):
     arr = []
     for cluster in clusters:
@@ -60,14 +46,16 @@ def get_in_cluster(data:dict, clusters):
                 arr.append(value)
     return np.array(arr)
 
+@app.route('/invoke-function', methods=['POST'])
+def invoke_function():
+    # Retrieve the function parameters from the request
+    data = request.json
+    # Call the function with the parameters
+    result = get_prediction(data['long'], data['lat'])
+    return {'result': result}
 
 #If invalid lat long was provided, throw an error
 def get_prediction(long, lat):
-    gradient: GradientBoostingRegressor = joblib.load('gradient.pkl')
-    extractor: Extractor = joblib.load('extractor.pkl')
-    humidity_url = 'https://api.data.gov.sg/v1/environment/relative-humidity'
-    temp_url = 'https://api.data.gov.sg/v1/environment/air-temperature'
-    rainfall_url = 'https://api.data.gov.sg/v1/environment/rainfall'
     clusters = extractor.get_clusters(long, lat)
     if len(clusters) == 0:
         return 0
@@ -110,11 +98,17 @@ def get_prediction(long, lat):
 
     return case_percent * density_percent
 
-#print (get_prediction(103.893059,1.398))
 
-# extractor.get_clusters()
-#
-# y = [[0,30,66,23]]
-#
-# print(gradient.predict(y))
-# print(gradient.predict(y))
+humidity_url = 'https://api.data.gov.sg/v1/environment/relative-humidity'
+temp_url = 'https://api.data.gov.sg/v1/environment/air-temperature'
+rainfall_url = 'https://api.data.gov.sg/v1/environment/rainfall'
+#if none in cluster , use average
+temp_data = get_data(temp_url)
+#if none in cluster, use average
+humidity_data = get_data(humidity_url)
+#if none in cluster, assume 0 rainfall
+rainfall_data = get_data(rainfall_url)
+
+gradient: GradientBoostingRegressor = joblib.load('gradient.pkl')
+extractor: Extractor = joblib.load('extractor.pkl')
+app.run(debug=True)  # Run the Flask app
