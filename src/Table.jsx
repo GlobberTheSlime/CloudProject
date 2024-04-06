@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import './Table.css';
 
+import React, { useState, useEffect } from 'react';
+
 // Define the getCookie function
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
@@ -9,31 +11,32 @@ const getCookie = (name) => {
   if (parts.length === 2) return parts.pop().split(';').shift();
 };
 
-const Table = () => {
-  const [tableData, setTableData] = useState([]);
+const clearCookie = () => {
+  document.cookie = 'myData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+};
+
+function Table({ queryLat, queryLong, queryResult }) {
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Function to retrieve data from cookie
-    const fetchCookieData = () => {
-      const cookieData = getCookie('myData');
-      if (cookieData) {
-        setTableData(JSON.parse(cookieData));
-      }
-    };
+    // Retrieve existing data from the cookie
+    const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
 
-    // Fetch data from cookie initially
-    fetchCookieData();
+    // Format the existing data for display in the table
+    const formattedData = existingData.map(entry => ({
+      date: entry.date,
+      lat: entry.lat.toString(),
+      long: entry.long.toString(),
+      rating: entry.rating.toString()
+    }));
 
-    // Subscribe to changes in the cookie data
-    const interval = setInterval(fetchCookieData, 1000); // Check for changes every second
-
-    // Clean up on component unmount
-    return () => clearInterval(interval);
-  }, []); // Only run once on component mount
+    // Update the state with the formatted data
+    setData(formattedData);
+  }, []);
 
   return (
     <div>
-      <table>
+      <table style={{ marginLeft: 40 }}>
         <thead>
           <tr>
             <th>Date</th>
@@ -43,21 +46,23 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {tableData.map((entry, index) => (
-            <tr key={index}>
-              <td>{entry.date}</td>
-              <td>{entry.lat}</td>
-              <td>{entry.long}</td>
-              <td>{entry.rating}</td>
+          {data.slice(-15).map((val, key) => (
+            <tr key={key}>
+              <td>{val.date}</td>
+              <td>{val.lat}</td>
+              <td>{val.long}</td>
+              <td>{val.rating}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      <button onClick={clearCookie}>Clear History</button>
     </div>
   );
-};
+}
 
 export default Table;
+
 
 
 
