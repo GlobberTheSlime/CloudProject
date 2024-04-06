@@ -15,11 +15,12 @@ function Table() {
         lat: entry.lat.toString(),
         long: entry.long.toString(),
         rating: entry.rating.toString()
-}));
+    }));
 
-// Update the state with the formatted data
-setData(formattedData);
-  }, []);
+    // Update the state with the formatted data
+    setData(formattedData);
+}, [getCookie('myData')]); // Trigger the effect when the cookie data changes
+
 
   const getCookie = (name) => {
     const cookies = document.cookie.split(';');
