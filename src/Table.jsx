@@ -8,8 +8,6 @@ const initialData = [
     { date: "26/01/24", lat: "1.359138", long: "103.615231" , rating: "1.2"},
 ];
 
-import React, { useEffect, useState } from 'react';
-
 function Table() {
   const [data, setData] = useState([]);
 
