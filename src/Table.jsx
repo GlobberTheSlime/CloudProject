@@ -9,6 +9,14 @@ const getCookie = (name) => {
   if (parts.length === 2) return parts.pop().split(';').shift();
 };
 
+const clearHistory = () => {
+  // Set an empty string as the cookie value and set its expiration date to a past date
+  document.cookie = 'myData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  
+  // Update the state to remove all data from the table
+  setTableData([]);
+};
+
 const Table = () => {
   const [tableData, setTableData] = useState([]);
 
