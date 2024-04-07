@@ -32,9 +32,11 @@ const Table = () => {
   }, []); // Only run once on component mount
 
   return (
-  <div>
-    <h3>Legend</h3>
-    <p>0 (Low Risk) - 1 (High Risk)</p>
+    <div>
+    <div style={{ border: '1px solid black', padding: '10px' }}>
+      <h3>Legend</h3>
+      <p>0 (Low Risk) - 1 (High Risk)</p>
+    </div>
     <div>
       <table>
         <thead>
@@ -58,6 +60,7 @@ const Table = () => {
       </table>
     </div>
   </div>
+  
   );
 };
 
