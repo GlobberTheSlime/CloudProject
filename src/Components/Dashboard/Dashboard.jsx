@@ -1,115 +1,69 @@
-import React, { useState, useEffect } from "react";
-import CoordinateInput from 'react-coordinate-input';
+import React, { useState } from "react";
+import { Cookies } from 'universal-cookie';
 
-function getCookie(name) {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.startsWith(name + '=')) {
-        return cookie.substring(name.length + 1);
-      }
-    }
-    return '';
-}
+const cookies = new Cookies();
 
-const Dashboard = ( {onQueryLat , onQueryLong , onQueryResult}) => {
-    const [latitude, setLatitude] = useState('');
-    const [longitude, setLongitude] = useState('');
-    const [result, setResult] = useState('');
+const Dashboard = ({ onQueryLat, onQueryLong, onQueryResult }) => {
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const data = {
-            long: longitude,
-            lat: latitude  // Example data to be passed to the function
-        };
-        
-        const hostname = window.location.hostname;
-        console.log(hostname)
-        fetch(`http://${hostname}:5000/invoke-function`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-            mode: 'cors',  // Include CORS headers in the request
-        })
-        .then(response => response.json())
-        .then(result => {
-            console.log('Result from Python function:', result.result);
-            setResult(result.result);
-            onQueryResult(result.result);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-            //Get current Date
-            const today = new Date();
-            const month = today.getMonth()+1;
-            const year = today.getFullYear();
-            const date = today. getDate();
-            const currentDate = month + "/" + date + "/" + year;
+    // Example data to be passed to the function
+    const data = { long: longitude, lat: latitude };
 
-            // Retrieve existing data from the cookie
-            const existingData = getCookie('myData') ? JSON.parse(getCookie('myData')) : [];
+    // Fetch data from the backend
+    fetch(`http://${window.location.hostname}:5000/invoke-function`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      mode: 'cors',
+    })
+      .then(response => response.json())
+      .then(result => {
+        // Update state with the result
+        onQueryResult(result.result);
 
-            // Create a new entry
-            const newEntry = {
-                date: currentDate,
-                long: longitude,
-                lat: latitude,
-                rating: result.result
-            };
+        // Store data in global cookie
+        const currentDate = new Date().toLocaleDateString();
+        const newEntry = { date: currentDate, long: longitude, lat: latitude, rating: result.result };
+        const existingData = cookies.get('myData') || [];
+        const updatedData = [...existingData, newEntry];
+        cookies.set('myData', updatedData, { path: '/' });
 
-            // Add the new entry to existing data
-            const updatedData = [...existingData, newEntry];
+        // Clear input fields
+        setLatitude('');
+        setLongitude('');
+      })
+      .catch(error => console.error('Error calling Python function:', error));
+  };
 
-            // Store updated data in the cookie
-            document.cookie = `myData=${JSON.stringify(updatedData)}; path=/`;
+  return (
+    <div style={{ textAlign: 'left' }}>
+      <h1>Welcome to the Dengue Prediction Webapp!</h1>
+      <div>
+        <h2>Enter your latitude and longitude to check the dengue rating near you</h2>
+        <form onSubmit={handleSubmit}>
+          <h3>Round off your inputs to 6 decimal places!!!</h3>
+          <div>
+            <label> Latitude: 
+              <input type="number" min="0" step="0.000001" value={latitude} onChange={(event) => setLatitude(event.target.value)} />
+            </label>
+          </div>
+          <div>
+            <label> Longitude: 
+              <input type="number" min="0" step="0.000001" value={longitude} onChange={(event) => setLongitude(event.target.value)} />
+            </label>
+          </div>
+          <div>
+            <input type="submit" value="Submit" />
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
-        })
-        .catch(error => {
-            console.error('Error calling Python function:', error);
-        });
-        
-    };
+export default Dashboard;
 
-    const latLong = () =>{
-        onQueryLat(latitude)
-        onQueryLong(longitude)
-    }
-
-    return (
-        <div style={{textAlign:'left'}}>
-            <h1>Welcome to the Dengue Prediction Webapp!</h1>
-            <div> 
-                <h2>Enter your latitude and longitude and let's see whats the dengue rating near you!</h2>
-                <form onSubmit={handleSubmit}>
-                    <h3>Round off your inputs to 6 decimal places!!!</h3>
-                        <div>
-                            <label> Latitude: 
-                                    <input type="number" min="0"  step="0.000001" value={latitude} onChange={(event) =>
-
-                                        setLatitude(event.target.value)
-                                        
-                                    }/>                    
-                            </label>                           
-                        </div>
-                        <div>
-                            <label> Longitude: 
-                                    <input type="number" min="0" step="0.000001" value={longitude} onChange={(event) =>
-                                    
-                                        setLongitude(event.target.value)
-                                        
-                                    
-                                    }/>                    
-                            </label>                       
-                        </div>
-                        <div>
-                            <input type="submit" value="Submit" onClick={latLong}/>  
-                        </div>
-                </form>
-            </div>
-        </div>
-
-    )
-}
-
-export default Dashboard
