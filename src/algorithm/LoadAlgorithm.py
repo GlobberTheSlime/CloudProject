@@ -1,7 +1,6 @@
 import joblib
 import numpy as np
 import requests
-import pymysql
 
 from sklearn.ensemble import GradientBoostingRegressor
 from flask import *
@@ -107,7 +106,7 @@ def get_prediction(long, lat):
 
     case_percent = cases/extractor.highest_cases
 
-    density_percent = density/extractor.highest_cases
+    density_percent = density/extractor.highest_density
 
     return case_percent * density_percent
 
