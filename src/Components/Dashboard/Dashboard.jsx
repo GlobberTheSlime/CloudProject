@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Cookies from 'universal-cookie';
 
+// Cookie instance to store data globally
 const cookies = new Cookies();
 
 const Dashboard = ({ onQueryLat, onQueryLong, onQueryResult }) => {
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
 
+  // Function to handle submit button event
   const handleSubmit = async (event) => {
     event.preventDefault();
 
