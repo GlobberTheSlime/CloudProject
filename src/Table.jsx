@@ -32,6 +32,9 @@ const Table = () => {
   }, []); // Only run once on component mount
 
   return (
+  <div>
+    <h3>Legend</h3>
+    <p>0 (Low Risk) - 1 (High Risk)</p>
     <div>
       <table>
         <thead>
@@ -54,12 +57,11 @@ const Table = () => {
         </tbody>
       </table>
     </div>
+  </div>
   );
 };
 
 export default Table;
-
-
 
 // Example of a data array that
 // you might receive from an API
