@@ -34,7 +34,7 @@ const Table = () => {
   return (
     <div>
     <div style={{ border: '1px solid black', padding: '10px' }}>
-      <h3>Legend</h3>
+      <h3>RISK INDEX</h3>
       <p>0 (Low Risk) - 1 (High Risk)</p>
     </div>
     <div>
@@ -59,7 +59,22 @@ const Table = () => {
         </tbody>
       </table>
     </div>
+    <button 
+    onClick={clearHistory}
+    style={{
+      backgroundColor: 'white',
+      color: 'black',
+      padding: '10px',
+      border: 'none',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      marginTop: '10px'
+    }}
+  >
+    Clear History
+  </button>
   </div>
+  
   
   );
 };
