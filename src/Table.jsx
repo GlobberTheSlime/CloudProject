@@ -1,24 +1,27 @@
-// Filename - App.js
 import React, { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
 import './Table.css';
 
 const Table = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(['myData']);
   const [tableData, setTableData] = useState([]);
 
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  };
+
   const clearHistory = () => {
-    // Clear the cookie by removing it
-    removeCookie('myData');
+    // Clear the cookie by setting its expiration date to a past date
+    document.cookie = 'myData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     setTableData([]);
   };
 
   useEffect(() => {
     // Function to retrieve data from cookie
     const fetchCookieData = () => {
-      const cookieData = cookies['myData'];
+      const cookieData = getCookie('myData');
       if (cookieData) {
-        setTableData(cookieData);
+        setTableData(JSON.parse(cookieData));
       }
     };
 
@@ -26,11 +29,11 @@ const Table = () => {
     fetchCookieData();
 
     // Subscribe to changes in the cookie data
-    const interval = setInterval(fetchCookieData, 10); // Check for changes every second
+    const interval = setInterval(fetchCookieData, 1000); // Check for changes every second
 
     // Clean up on component unmount
     return () => clearInterval(interval);
-  }, [cookies]); // Run when cookies change
+  }, []); // Only run once on component mount
 
   return (
     <div>
@@ -76,6 +79,7 @@ const Table = () => {
 };
 
 export default Table;
+
 
 
 // Example of a data array that
