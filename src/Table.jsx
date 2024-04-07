@@ -2,15 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import './Table.css';
 
-// Define the getCookie function
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-};
-
 const clearHistory = () => {
-  // Set an empty string as the cookie value and set its expiration date to a past date
+  // Clear the cookie by setting its expiration date to a past date
   document.cookie = 'myData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 };
 
@@ -30,7 +23,7 @@ const Table = () => {
     fetchCookieData();
 
     // Subscribe to changes in the cookie data
-    const interval = setInterval(fetchCookieData, 10); // Check for changes every second
+    const interval = setInterval(fetchCookieData, 1000); // Check for changes every second
 
     // Clean up on component unmount
     return () => clearInterval(interval);
@@ -38,12 +31,11 @@ const Table = () => {
 
   return (
     <div>
-    <div style={{ border: '1px solid black', padding: '10px' }}>
-      <h3>RISK INDEX</h3>
-      <p>0 (Low Risk) - 1 (High Risk)</p>
-    </div>
-    <div>
-      <table>
+      <div style={{ border: '1px solid black', padding: '10px', marginBottom: '10px' }}>
+        <h3>RISK INDEX</h3>
+        <p>0 (Low Risk) - 1 (High Risk)</p>
+      </div>
+      <table style={{ marginBottom: '10px' }}>
         <thead>
           <tr>
             <th>Date</th>
@@ -63,24 +55,20 @@ const Table = () => {
           ))}
         </tbody>
       </table>
+      <button
+        onClick={clearHistory}
+        style={{
+          backgroundColor: 'grey',
+          color: 'black',
+          padding: '10px',
+          border: '2px solid black',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}
+      >
+        Clear History
+      </button>
     </div>
-    <button 
-    onClick={clearHistory}
-    style={{
-      backgroundColor: 'white',
-      color: 'black',
-      padding: '10px',
-      border: 'none',
-      borderRadius: '5px',
-      cursor: 'pointer',
-      marginTop: '10px'
-    }}
-  >
-    Clear History
-  </button>
-  </div>
-  
-  
   );
 };
 
