@@ -1,7 +1,6 @@
 import joblib
 import numpy as np
 import requests
-import pymysql
 
 from sklearn.ensemble import GradientBoostingRegressor
 from flask import *
@@ -107,7 +106,7 @@ def get_prediction(long, lat):
 
     case_percent = cases/extractor.highest_cases
 
-    density_percent = density/extractor.highest_cases
+    density_percent = density/extractor.highest_density
 
     return case_percent * density_percent
 
@@ -124,5 +123,4 @@ rainfall_data = get_data(rainfall_url)
 
 gradient: GradientBoostingRegressor = joblib.load('gradient.pkl')
 extractor: Extractor = joblib.load('extractor.pkl')
-get_prediction(103.9,1.39)
 app.run(host='0.0.0.0', port=5000)# Run the Flask app
