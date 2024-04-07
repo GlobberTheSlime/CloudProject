@@ -14,29 +14,37 @@ const Dashboard = ({ onQueryLat, onQueryLong, onQueryResult }) => {
     const data = { long: longitude, lat: latitude };
 
     // Fetch data from the backend
-    fetch(`http://${window.location.hostname}:5000/invoke-function`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-      mode: 'cors',
-    })
-      .then(response => response.json())
-      .then(result => {
-        // Update state with the result
-        onQueryResult(result.result);
+    // fetch(`http://${window.location.hostname}:5000/invoke-function`, {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(data),
+    //   mode: 'cors',
+    // })
+    //   .then(response => response.json())
+    //   .then(result => {
+    //     // Update state with the result
+    //     onQueryResult(result.result);
 
-        // Store data in global cookie
-        const currentDate = new Date().toLocaleDateString();
-        const newEntry = { date: currentDate, long: longitude, lat: latitude, rating: result.result };
-        const existingData = cookies.get('myData') || [];
-        const updatedData = [...existingData, newEntry];
-        cookies.set('myData', updatedData, { path: '/' });
+    //     // Store data in global cookie
+    //     const currentDate = new Date().toLocaleDateString();
+    //     const newEntry = { date: currentDate, long: longitude, lat: latitude, rating: result.result };
+    //     const existingData = cookies.get('myData') || [];
+    //     const updatedData = [...existingData, newEntry];
+    //     cookies.set('myData', updatedData, { path: '/' });
 
-        // Clear input fields
-        setLatitude('');
-        setLongitude('');
-      })
-      .catch(error => console.error('Error calling Python function:', error));
+    //     // Clear input fields
+    //     setLatitude('');
+    //     setLongitude('');
+    //   })
+    //   .catch(error => console.error('Error calling Python function:', error));
+
+
+      // Store data in global cookie
+      const currentDate = new Date().toLocaleDateString();
+      const newEntry = { date: currentDate, long: longitude, lat: latitude, rating: Math.random()};
+      const existingData = cookies.get('myData') || [];
+      const updatedData = [...existingData, newEntry];
+      cookies.set('myData', updatedData, { path: '/' });
   };
 
   return (
