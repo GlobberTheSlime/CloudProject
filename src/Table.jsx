@@ -21,7 +21,8 @@ const Table = () => {
     const fetchCookieData = () => {
       const cookieData = getCookie('myData');
       if (cookieData) {
-        setTableData(JSON.parse(cookieData));
+        const decodedData = decodeURIComponent(cookieData); // Decode URL encoded data
+        setTableData(JSON.parse(decodedData));
       }
     };
 
