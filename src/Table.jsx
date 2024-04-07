@@ -8,13 +8,14 @@ const getCookie = (name) => {
   if (parts.length === 2) return parts.pop().split(';').shift();
 };
 
-const clearHistory = () => {
-  // Clear the cookie by setting its expiration date to a past date
-  document.cookie = 'myData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-};
-
 const Table = () => {
   const [tableData, setTableData] = useState([]);
+
+  const clearHistory = () => {
+    // Clear the cookie by setting its expiration date to a past date
+    document.cookie = 'myData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    setTableData([]);
+  };
 
   useEffect(() => {
     // Function to retrieve data from cookie
@@ -29,7 +30,7 @@ const Table = () => {
     fetchCookieData();
 
     // Subscribe to changes in the cookie data
-    const interval = setInterval(fetchCookieData, 1000); // Check for changes every second
+    const interval = setInterval(fetchCookieData, 10); // Check for changes every second
 
     // Clean up on component unmount
     return () => clearInterval(interval);
